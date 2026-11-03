@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>珍珠美人魚：凱特城運動知識拯救海斗大作戰</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <!-- Google Fonts: Noto Serif TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: "Noto Serif TC", serif;
+            font-weight: 500;
+            background: linear-gradient(180deg, #020617 0%, #0f172a 40%, #1e1b4b 80%, #2e1065 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .custom-title-font {
+            font-family: "Noto Serif TC", serif;
+            font-weight: 900;
+        }
+
+        /* 題目專屬指定配色 */
+        .color-primary-custom {
+            color: #9D8189 !important;
+        }
+        .color-secondary-custom {
+            color: #ADB5BD !important;
+        }
+        .bg-primary-custom {
+            background-color: #9D8189 !important;
+        }
+        .border-primary-custom {
+            border-color: #9D8189 !important;
+        }
+        .border-secondary-custom {
+            border-color: #ADB5BD !important;
+        }
+
+        /* Underwater Glowing Bubble Effect */
+        .bubble {
+            position: absolute;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(157, 129, 137, 0.4));
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(157, 129, 137, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.9);
+            animation: floatUp 7s infinite linear;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) scale(0.3); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        /* Music Equalizer Wave Effect */
+        .sound-wave {
+            display: inline-flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 16px;
+        }
+        .sound-wave span {
+            width: 3px;
+            background-color: #9D8189;
+            animation: wave 0.6s ease-in-out infinite alternate;
+        }
+        .sound-wave span:nth-child(2) { animation-delay: 0.15s; }
+        .sound-wave span:nth-child(3) { animation-delay: 0.3s; }
+        .sound-wave span:nth-child(4) { animation-delay: 0.45s; }
+
+        @keyframes wave {
+            0% { height: 4px; }
+            100% { height: 18px; }
+        }
+
+        /* Dynamic Attack Wave Beam Animation */
+        .attack-beam {
+            position: absolute;
+            top: 50%;
+            left: 20%;
+            width: 0%;
+            height: 20px;
+            background: linear-gradient(90deg, rgba(157,129,137,0.9), rgba(173,181,189,0.9), rgba(244,114,182,1));
+            border-radius: 10px;
+            box-shadow: 0 0 25px #9D8189, 0 0 40px #ADB5BD;
+            transform: translateY(-50%);
+            z-index: 30;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .attack-active {
+            animation: beamLaunch 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+        }
+
+        @keyframes beamLaunch {
+            0% { width: 0%; opacity: 1; }
+            70% { width: 65%; opacity: 1; }
+            100% { width: 65%; opacity: 0; }
+        }
+
+        /* Cage Drop Animation for Game Over */
+        .cage-container {
+            animation: cageDrop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes cageDrop {
+            0% { transform: translateY(-1000px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Castle Panel Styling */
+        .gaito-panel {
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(157, 129, 137, 0.4);
+            box-shadow: 0 0 50px rgba(157, 129, 137, 0.3);
+        }
+
+        .glow-custom {
+            box-shadow: 0 0 25px rgba(157, 129, 137, 0.7);
+        }
+
+        /* Character Frame Card */
+        .char-card {
+            background: linear-gradient(135deg, rgba(30, 27, 75, 0.9), rgba(15, 23, 42, 0.95));
+            border: 2px solid rgba(157, 129, 137, 0.3);
+            box-shadow: inset 0 0 15px rgba(173, 181, 189, 0.2);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center p-2 md:p-6 relative min-h-screen">
+
+    <!-- Floating Underwater Bubbles Background -->
+    <div id="bubbles-container" class="fixed inset-0 pointer-events-none z-0"></div>
+
+    <!-- Audio Control Button -->
+    <div class="fixed top-4 right-4 z-50 flex items-center gap-2">
+        <button id="bgm-toggle-btn" onclick="toggleAudio()" class="px-4 py-2.5 rounded-full bg-slate-950/90 color-primary-custom border-2 border-primary-custom shadow-xl hover:scale-105 active:scale-95 transition flex items-center gap-2 text-xs md:text-sm font-bold">
+            <i id="bgm-icon" class="fa-solid fa-volume-high color-primary-custom"></i>
+            <span id="bgm-status-text">對決背景音：開啟</span>
+            <div id="sound-wave-anim" class="sound-wave ml-1">
+                <span></span><span></span><span></span><span></span>
+            </div>
+        </button>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <div class="w-full max-w-4xl gaito-panel rounded-3xl p-4 md:p-8 shadow-2xl relative z-10 my-auto">
+        
+        <!-- Header / Stage & Score Tracker -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-b border-slate-700/60 pb-4">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-gem color-primary-custom text-2xl md:text-3xl animate-pulse"></i>
+                <h1 class="text-xl md:text-2xl font-black custom-title-font color-primary-custom">
+                    凱特城決戰：運動知識拯救海斗大作戰
+                </h1>
+            </div>
+            
+            <!-- Progress Tracker & Realtime Score -->
+            <div class="flex items-center gap-3 md:gap-4 bg-slate-950/90 px-4 py-2 rounded-full border border-secondary-custom">
+                <div class="text-xs md:text-sm font-bold color-secondary-custom">
+                    關卡：<span id="current-stage" class="color-primary-custom text-lg md:text-xl font-black">1</span> / 25
+                </div>
+                <div class="w-20 md:w-28 bg-slate-900 h-3.5 rounded-full overflow-hidden border border-slate-700">
+                    <div id="progress-bar" class="bg-primary-custom h-full w-[4%] transition-all duration-500"></div>
+                </div>
+                <div class="text-xs md:text-sm font-bold text-amber-400 pl-2 border-l border-slate-700">
+                    得分：<span id="header-score" class="text-base md:text-lg font-black">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- START SCREEN -->
+        <div id="start-screen" class="text-center py-6 space-y-6">
+            <div class="relative inline-block">
+                <div class="w-44 h-44 md:w-52 md:h-52 mx-auto rounded-full bg-gradient-to-tr from-slate-700 via-slate-800 to-slate-900 p-1.5 glow-custom animate-pulse border-2 border-primary-custom">
+                    <div class="w-full h-full bg-slate-950 rounded-full flex items-center justify-center overflow-hidden relative p-1">
+                        <!-- 使用 Marco Albiero 繪製之七海露亞經典頭像照片 -->
+                        <img id="start-mermaid-img" src="https://megapx-assets.dcard.tw/images/58149d72-d439-4097-870b-cc9a3fc4e38d/1280.jpeg" class="w-full h-full object-cover rounded-full" alt="七海露亞">
+                        <div class="absolute bottom-2 text-xs color-primary-custom font-bold bg-slate-950/90 px-3 py-1 rounded-full border border-primary-custom">
+                            粉紅真珠公主：露亞
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="text-2xl md:text-3xl font-bold color-primary-custom custom-title-font">黑暗反派佔領凱特城！海斗受困宮殿深處！</h2>
+            <p class="color-secondary-custom max-w-xl mx-auto text-sm md:text-base leading-relaxed">
+                化身為經典真珠美人魚公主，用你的<span class="color-primary-custom font-bold">運動常識與急救知識</span>發射<span class="color-primary-custom font-bold">閃亮歌聲</span>，累積高分連擊擊敗反派與恐怖小丑，救出海斗王子吧！
+            </p>
+            
+            <div class="bg-slate-950/90 p-4 rounded-xl max-w-md mx-auto text-left text-xs md:text-sm color-secondary-custom border border-primary-custom shadow-inner">
+                <div class="font-bold color-primary-custom mb-2.5 flex items-center gap-2">
+                    <i class="fa-solid fa-gamepad color-primary-custom"></i>對決與計分規則：
+                </div>
+                <ul class="list-disc list-inside space-y-1.5 leading-relaxed">
+                    <li>全關卡共有 <span class="text-white font-bold">25 題不重複</span>體育題目（配有情境插圖）。</li>
+                    <li>答對 1 題基礎得 <span class="text-amber-400 font-bold">+100 分</span>，連對可享 <span class="text-amber-300 font-bold">Combo 加成</span>！</li>
+                    <li>答錯滿 <span class="text-red-400 font-bold">2 題</span>會觸發天降鐵籠並展示最終戰績。</li>
+                    <li>答錯時會開啟 <span class="color-primary-custom font-bold">AI 觀念插圖解析圖卡</span> 說明正確答案原因。</li>
+                </ul>
+            </div>
+
+            <button id="start-btn" onclick="startGame()" class="px-8 py-4 bg-primary-custom text-white font-black text-xl rounded-full shadow-2xl hover:scale-105 active:scale-95 transition transform border-2 border-white/60 glow-custom custom-title-font">
+                <i class="fa-solid fa-play mr-2"></i>開始對決闖關
+            </button>
+        </div>
+
+        <!-- BATTLE / QUIZ SCREEN -->
+        <div id="battle-screen" class="hidden">
+            <!-- Dynamic Battle Arena Frame -->
+            <div class="grid grid-cols-2 gap-3 md:gap-6 mb-6 bg-slate-950/90 p-4 rounded-2xl border border-primary-custom relative overflow-hidden">
+                
+                <!-- Attack Beam Layer -->
+                <div id="attack-beam" class="attack-beam"></div>
+
+                <!-- Mermaid Challenger Side -->
+                <div class="char-card rounded-xl p-3 flex flex-col items-center justify-center text-center relative border border-primary-custom">
+                    <div class="absolute top-2 left-2 flex gap-1.5 text-red-500 text-sm md:text-base z-10" id="lives-container">
+                        <i class="fa-solid fa-heart"></i>
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+
+                    <div id="mermaid-avatar-wrapper" class="relative my-2 w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-primary-custom glow-custom bg-slate-900/80 p-1">
+                        <img id="mermaid-img" src="" class="w-full h-full object-cover rounded-full transition-transform duration-300" alt="七海露亞">
+                    </div>
+                    <div id="mermaid-name" class="font-bold color-primary-custom text-sm md:text-base">七海露亞</div>
+                    <div class="text-xs color-secondary-custom" id="mermaid-title">粉紅真珠美人魚</div>
+                </div>
+
+                <!-- VS Badge -->
+                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary-custom text-white font-black text-xs md:text-sm px-3.5 py-1.5 rounded-full border-2 border-white shadow-2xl z-20">
+                    VS
+                </div>
+
+                <!-- Boss Side -->
+                <div class="char-card rounded-xl p-3 flex flex-col items-center justify-center text-center relative border border-secondary-custom">
+                    <div id="boss-avatar-wrapper" class="relative my-2 w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-secondary-custom shadow-lg bg-slate-900/80 p-1">
+                        <img id="boss-img" src="" class="w-full h-full object-cover rounded-full transition-transform duration-300" alt="魔王反派照片">
+                    </div>
+                    <div id="boss-name" class="font-bold color-secondary-custom text-sm md:text-base">黑魔女</div>
+                    <div class="text-xs text-slate-400" id="boss-title">迪士尼反派</div>
+                </div>
+            </div>
+
+            <!-- Quiz Card -->
+            <div class="bg-slate-950/95 rounded-2xl p-4 md:p-6 border border-primary-custom shadow-inner mb-4">
+                <div class="flex items-center justify-between mb-3">
+                    <span id="question-category" class="bg-slate-800 color-primary-custom border border-primary-custom text-xs px-3 py-1 rounded-full font-bold">
+                        躲避球
+                    </span>
+                    <span id="question-difficulty" class="text-xs color-secondary-custom font-semibold">
+                        <i class="fa-solid fa-star mr-1 color-primary-custom"></i>難易度：簡單
+                    </span>
+                </div>
+
+                <!-- 題目文字與專屬情境插圖 -->
+                <div class="flex flex-col md:flex-row gap-4 items-center mb-6">
+                    <div class="w-full md:w-44 h-32 rounded-xl border border-secondary-custom overflow-hidden bg-slate-900 shrink-0 shadow-md">
+                        <img id="question-illustration" src="" class="w-full h-full object-cover" alt="題目情境插圖">
+                    </div>
+                    <h3 id="question-text" class="text-lg md:text-xl font-bold color-primary-custom custom-title-font leading-relaxed">
+                        題目載入中...
+                    </h3>
+                </div>
+
+                <!-- Options Grid -->
+                <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <!-- Options JS Dynamic -->
+                </div>
+            </div>
+
+            <!-- Rationale & AI Illustration Explanation Box -->
+            <div id="feedback-box" class="hidden p-4 rounded-xl mb-4 text-sm font-semibold transition-all duration-300">
+                <p id="feedback-text"></p>
+
+                <!-- AI 插圖解析圖卡 -->
+                <div id="ai-illustration-container" class="hidden mt-3 bg-slate-950 p-4 rounded-xl border border-primary-custom">
+                    <div class="text-xs color-primary-custom mb-3 font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-lightbulb text-amber-400 text-base"></i> AI 觀念插圖示範與詳盡解析：
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-4 items-center bg-slate-900 p-3 rounded-lg border border-slate-800">
+                        <img id="ai-explanation-img" src="" class="w-full md:w-40 h-28 object-cover rounded-md border border-secondary-custom" alt="觀念解析圖解">
+                        <div class="text-xs color-secondary-custom leading-relaxed" id="ai-explanation-text">
+                            解析說明載入中...
+                        </div>
+                    </div>
+                </div>
+
+                <button id="next-btn" onclick="nextQuestion()" class="mt-4 px-6 py-2.5 bg-primary-custom text-white rounded-lg font-bold text-sm shadow-md transition transform active:scale-95 custom-title-font">
+                    前進下一關 <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- GAME OVER SCREEN (CAGED) -->
+        <div id="game-over-screen" class="hidden text-center py-6 relative">
+            <div class="relative w-56 h-56 mx-auto mb-4 flex items-center justify-center">
+                <img id="caged-mermaid-img" src="" class="w-44 h-44 rounded-full object-cover filter grayscale-[20%] p-2" alt="受困的美人魚">
+                
+                <!-- Cage Graphic Overlay -->
+                <div class="absolute inset-0 cage-container flex flex-col justify-between items-center border-8 border-slate-700 bg-slate-950/70 rounded-lg p-2 shadow-2xl">
+                    <div class="w-full h-3 bg-slate-600 rounded"></div>
+                    <div class="flex justify-around w-full h-full border-x-4 border-slate-600">
+                        <div class="w-2.5 h-full bg-slate-500 shadow-md"></div>
+                        <div class="w-2.5 h-full bg-slate-500 shadow-md"></div>
+                        <div class="w-2.5 h-full bg-slate-500 shadow-md"></div>
+                        <div class="w-2.5 h-full bg-slate-500 shadow-md"></div>
+                    </div>
+                    <div class="w-full h-5 bg-slate-800 rounded"></div>
+                </div>
+            </div>
+
+            <h2 class="text-3xl md:text-4xl font-black custom-title-font text-red-500 tracking-widest mb-2 animate-bounce drop-shadow-md">
+                再試一次
+            </h2>
+            <p class="color-secondary-custom mb-4 text-xs md:text-sm leading-relaxed">
+                答錯滿 2 題！天降鐵籠將露亞關起來了！
+            </p>
+
+            <!-- 得分結算卡 (Game Over) -->
+            <div class="bg-slate-950/90 border border-red-500/50 p-4 rounded-2xl max-w-sm mx-auto mb-6 text-left shadow-xl">
+                <div class="text-center border-b border-slate-800 pb-2 mb-3">
+                    <span class="text-xs color-secondary-custom font-bold">🎯 本次戰績結算</span>
+                    <div id="gameover-final-score" class="text-3xl font-black text-amber-400 mt-1">0 分</div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs color-secondary-custom">
+                    <div>答對題數：<span id="gameover-correct-count" class="text-white font-bold">0</span> / 25</div>
+                    <div>最高連擊：<span id="gameover-max-combo" class="text-amber-300 font-bold">0 Combo</span></div>
+                </div>
+            </div>
+
+            <button onclick="restartGame()" class="px-8 py-3.5 bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 text-white font-bold text-lg rounded-full shadow-xl hover:scale-105 active:scale-95 transition custom-title-font">
+                <i class="fa-solid fa-rotate-right mr-2"></i>重新挑戰刷新紀錄
+            </button>
+        </div>
+
+        <!-- VICTORY SCREEN (SAVED KAITO) -->
+        <div id="victory-screen" class="hidden text-center py-6 space-y-6">
+            <div class="flex justify-center items-center gap-4 animate-pulse">
+                <div class="w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden border-2 border-primary-custom glow-custom p-1 bg-slate-900">
+                    <img id="victory-mermaid-img" src="" class="w-full h-full object-cover rounded-full" alt="露亞">
+                </div>
+                <span class="color-primary-custom text-4xl"><i class="fa-solid fa-heart animate-ping"></i></span>
+                <div class="w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden border-2 border-secondary-custom glow-custom p-1 bg-slate-900">
+                    <img src="https://truth.bahamut.com.tw/s01/201712/01b9ac932d55bd3cc6ac46c61267dde1.JPG" class="w-full h-full object-cover rounded-full" alt="海斗王子">
+                </div>
+            </div>
+
+            <h2 class="text-4xl md:text-6xl font-black custom-title-font color-primary-custom tracking-widest drop-shadow-lg animate-bounce">
+                闖關成功
+            </h2>
+
+            <p class="text-base md:text-xl color-secondary-custom max-w-lg mx-auto font-bold leading-relaxed">
+                太棒了！用閃亮的歌聲擊飛了恐怖小丑！<br>
+                成功救出了受困在凱特城宮殿最深處的海斗王子！
+            </p>
+
+            <!-- 得分結算卡 (Victory) -->
+            <div class="bg-slate-900/90 border border-primary-custom p-6 rounded-2xl max-w-md mx-auto glow-custom text-left">
+                <div class="text-center border-b border-slate-700 pb-3 mb-4">
+                    <span class="text-xs color-primary-custom font-bold">🏆 拯救海斗最高榮譽分數</span>
+                    <div id="victory-final-score" class="text-4xl font-black text-amber-400 mt-1">0 分</div>
+                    <div id="victory-rank-badge" class="mt-2 inline-block px-3 py-1 bg-amber-500/20 text-amber-300 text-xs font-bold rounded-full border border-amber-400">
+                        S級 神級體育歌聲
+                    </div>
+                </div>
+
+                <div class="space-y-2 text-xs md:text-sm color-secondary-custom">
+                    <div class="flex justify-between">
+                        <span>答對題數：</span>
+                        <span id="victory-correct-count" class="text-white font-bold">25 / 25</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>最高連續答對：</span>
+                        <span id="victory-max-combo" class="text-amber-300 font-bold">25 Combo</span>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-slate-800 text-xs color-primary-custom font-bold text-center">
+                    🌊 海斗：「謝謝妳救了我！妳的運動知識與歌聲太厲害了！」
+                </div>
+            </div>
+
+            <button onclick="restartGame()" class="px-8 py-4 bg-primary-custom text-white font-black text-xl rounded-full shadow-xl hover:scale-105 transition glow-custom custom-title-font">
+                <i class="fa-solid fa-trophy mr-2"></i>再次挑戰破紀錄
+            </button>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT GAME LOGIC & AUDIO SYNTHESIZER -->
+    <script>
+        // --- GAME CONSTANTS & ASSETS ---
+
+        // Fixed Image: Marco Albiero's Classic Luchia Image
+        const LUCHIA_IMAGE_URL = "https://megapx-assets.dcard.tw/images/58149d72-d439-4097-870b-cc9a3fc4e38d/1280.jpeg";
+
+        // Mermaid Character Data
+        const mermaids = [
+            { name: "七海露亞", title: "粉紅真珠美人魚", img: LUCHIA_IMAGE_URL, color: "color-primary-custom" }
+        ];
+
+        // Disney Villains Real Pictures
+        const disneyVillainsList = [
+            { name: "烏蘇拉 (Ursula)", img: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=400&auto=format&fit=crop&q=80", title: "海巫婆反派" },
+            { name: "賈方 (Jafar)", img: "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=400&auto=format&fit=crop&q=80", title: "邪惡國師" },
+            { name: "黑魔女 (Maleficent)", img: "https://images.unsplash.com/photo-1514539079130-25950c84af65?w=400&auto=format&fit=crop&q=80", title: "黑暗魔女" },
+            { name: "庫伊拉 (Cruella)", img: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=400&auto=format&fit=crop&q=80", title: "時尚狂魔" },
+            { name: "刀疤 (Scar)", img: "https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?w=400&auto=format&fit=crop&q=80", title: "草原陰謀家" },
+            { name: "冥王哈迪斯 (Hades)", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&auto=format&fit=crop&q=80", title: "冥界之王" },
+            { name: "壞皇后 (Evil Queen)", img: "https://images.unsplash.com/photo-1563089145-599997674d42?w=400&auto=format&fit=crop&q=80", title: "毒蘋果皇后" }
+        ];
+
+        // Level 25 Final Boss
+        const finalClownBoss = {
+            name: "恐怖深海小丑 (Terror Clown)",
+            img: "https://images.unsplash.com/photo-1541364983171-a8ba01e95cfc?w=400&auto=format&fit=crop&q=80",
+            title: "凱特城終極魔王"
+        };
+
+        // Complete 25 Non-Repeating Questions Data Set
+        const rawQuestionsData = [
+            {
+                category: "躲避球",
+                difficulty: "簡單",
+                question: "在標準國小躲避球比賽中，當內場球員被外場球員擲出的飛球直接擊中且沒接住時，應該怎麼辦？",
+                illustration: "https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "繼續留在內場比賽", isCorrect: false },
+                    { text: "必須移到外場成為外場球員", isCorrect: true },
+                    { text: "直接被淘汰離開球場", isCorrect: false },
+                    { text: "獲得一次罰球機會", isCorrect: false }
+                ],
+                rationale: "躲避球規則中，內場球員若被擊中且未接住球，即算出局並需移動至外場繼續協助傳球與攻擊對方內場。"
+            },
+            {
+                category: "籃球",
+                difficulty: "簡單",
+                question: "籃球比賽中，球員接到球後，在沒有運球的情況下走了三步以上，這屬於哪一種違例？",
+                illustration: "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "雙重運球 (Double Dribble)", isCorrect: false },
+                    { text: "走步違例 (Traveling)", isCorrect: true },
+                    { text: "回後場違例", isCorrect: false },
+                    { text: "3秒違例", isCorrect: false }
+                ],
+                rationale: "籃球規則規定持球時若未進行運球，最多僅能踏出兩步（確定軸心腳），若移動超過限制即構成「走步違例」。"
+            },
+            {
+                category: "羽球",
+                difficulty: "中等",
+                question: "羽球單打比賽中，當發球者的得分分數為「雙數（如 0, 2, 4 分）」時，發球者應該在哪一個發球區發球？",
+                illustration: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "左方發球區", isCorrect: false },
+                    { text: "右方發球區", isCorrect: true },
+                    { text: "中間任何位置均可", isCorrect: false },
+                    { text: "後方底線外", isCorrect: false }
+                ],
+                rationale: "羽球正式規則：得分為偶數（雙數，包括0分）時，必須在右發球區發球；得分為奇數（單數）時，則在左發球區發球。"
+            },
+            {
+                category: "桌球",
+                difficulty: "簡單",
+                question: "進行桌球發球時，球必須拋起至少多少公分以上，且發球過程中球不能被身體擋住？",
+                illustration: "https://images.unsplash.com/photo-1534158914592-062992fbe900?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "約 5 公分", isCorrect: false },
+                    { text: "約 16 公分以上", isCorrect: true },
+                    { text: "約 50 公分以上", isCorrect: false },
+                    { text: "不需要拋球，可直接從手上打出", isCorrect: false }
+                ],
+                rationale: "桌球發球規範要求球必須放於攤平的掌心，近乎垂直向上拋起至少 16 公分，且落下過程才能擊球，以防遮擋偷球。"
+            },
+            {
+                category: "排球",
+                difficulty: "中等",
+                question: "在排球比賽中，同一方隊伍在將球擊回對方場地前，最多可以觸球幾次（攔網觸球不計入）？",
+                illustration: "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "2 次", isCorrect: false },
+                    { text: "3 次", isCorrect: true },
+                    { text: "4 次", isCorrect: false },
+                    { text: "無限次", isCorrect: false }
+                ],
+                rationale: "排球比賽中，每隊最多可以觸球 3 次（通常是第一次低手接球、第二次高手舉球、第三次扣球過網），超過 3 次算四次擊球犯規。"
+            },
+            {
+                category: "運動急救",
+                difficulty: "簡單",
+                question: "在運動中如果發生急性扭傷（如腳踝扭傷），傳統急救原則「PRICE」中的「I」代表什麼處理方式？",
+                illustration: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "Ice（冰敷）", isCorrect: true },
+                    { text: "Ignore（忽視）", isCorrect: false },
+                    { text: "Injection（打針）", isCorrect: false },
+                    { text: "Intensive exercise（劇烈運動）", isCorrect: false }
+                ],
+                rationale: "PRICE急救英文分別為：P(Protection保護)、R(Rest休息)、I(Ice冰敷降溫止腫)、C(Compression加壓)、E(Elevation抬高傷處)。"
+            },
+            {
+                category: "足球",
+                difficulty: "簡單",
+                question: "足球比賽中，除了守門員在自家的罰球區（大禁區）內之外，其他球員在場上不能用身體的什麼部位觸球？",
+                illustration: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "頭部", isCorrect: false },
+                    { text: "胸口", isCorrect: false },
+                    { text: "手臂與手掌", isCorrect: true },
+                    { text: "大腿", isCorrect: false }
+                ],
+                rationale: "足球運動的核心規則是場上球員不能以手部（手臂與手掌）故意觸球，否則會被判手球犯規。"
+            },
+            {
+                category: "游泳防溺",
+                difficulty: "簡單",
+                question: "水上運動與游泳時，如果發現有人溺水，國小學生最安全的救援原則是什麼？",
+                illustration: "https://images.unsplash.com/photo-1530549387789-4c1017266635?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "立刻自己跳下水救人", isCorrect: false },
+                    { text: "大聲呼救、打119、善用延伸物（如竹竿、救生圈）投擲", isCorrect: true },
+                    { text: "裝作沒看見離開", isCorrect: false },
+                    { text: "手拉手串成人鏈下水", isCorrect: false }
+                ],
+                rationale: "教育部推廣防溺五步「叫叫伸拋划」：大聲呼救、打119、利用延伸物或漂浮物救人，絕對不要冒然下水救人以防雙雙溺水。"
+            },
+            {
+                category: "棒球",
+                difficulty: "簡單",
+                question: "棒球比賽中，打擊者累積到幾個「好球」時，就會被裁定「三振出局」？",
+                illustration: "https://images.unsplash.com/photo-1562077772-3bd90403f7f0?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "2 個好球", isCorrect: false },
+                    { text: "3 個好球", isCorrect: true },
+                    { text: "4 個好球", isCorrect: false },
+                    { text: "5 個好球", isCorrect: false }
+                ],
+                rationale: "棒球規則中，投手投出 3 個好球而打擊者未擊出安打時，打擊者即被裁定三振出局（Strikeout）。"
+            },
+            {
+                category: "田徑",
+                difficulty: "簡單",
+                question: "在田徑跑步比賽中，聽到鳴槍出發前如果有人搶先起跑，這稱為什麼？",
+                illustration: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "搶跑/偷跑（偷起跑違例）", isCorrect: true },
+                    { text: "越位", isCorrect: false },
+                    { text: "阻擋犯規", isCorrect: false },
+                    { text: "技術犯規", isCorrect: false }
+                ],
+                rationale: "在發令槍響前即離開起跑架或跨出起跑線稱為搶跑（False start），國際正式比賽搶跑一次就會直接被取消資格。"
+            },
+            {
+                category: "籃球",
+                difficulty: "簡單",
+                question: "籃球比賽中，防守球員在防守時用手推人或身體碰撞導致持球者失去平衡，會被裁判吹判什麼？",
+                illustration: "https://images.unsplash.com/photo-1519766304817-4f37bda74a29?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "技術犯規", isCorrect: false },
+                    { text: "個人犯規（推人/阻擋犯規）", isCorrect: true },
+                    { text: "走步違例", isCorrect: false },
+                    { text: "違規換人", isCorrect: false }
+                ],
+                rationale: "非合法的身體接觸（如推人、拉人、阻擋等）屬於個人犯規（Personal Foul），會記錄犯規次數。"
+            },
+            {
+                category: "體適能",
+                difficulty: "簡單",
+                question: "國小體適能測驗中，主要用來測驗身體「柔韌性與關節活動度」的項目是什麼？",
+                illustration: "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "立定跳遠", isCorrect: false },
+                    { text: "坐姿體前彎", isCorrect: true },
+                    { text: "1分鐘仰臥起坐", isCorrect: false },
+                    { text: "800公尺跑走", isCorrect: false }
+                ],
+                rationale: "「坐姿體前彎」主要測驗下背部與大腿後側肌肉韌帶的伸展性，代表身體的柔軟度。"
+            },
+            {
+                category: "體適能",
+                difficulty: "簡單",
+                question: "國小體適能測驗中，用來測驗下肢「爆發力」的項目是哪一個？",
+                illustration: "https://images.unsplash.com/photo-1434596922112-19c563067271?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "坐姿體前彎", isCorrect: false },
+                    { text: "立定跳遠", isCorrect: true },
+                    { text: "800公尺跑走", isCorrect: false },
+                    { text: "身體質量指數(BMI)", isCorrect: false }
+                ],
+                rationale: "立定跳遠需要雙腳同時用力跳躍，能準確評估下肢肌肉在短時間內產生的最大力量（爆發力）。"
+            },
+            {
+                category: "羽球",
+                difficulty: "簡單",
+                question: "羽球比賽進行中，如果羽球在空中飛行時壓在邊線或底線上落下，這球算「界內」還是「界外」？",
+                illustration: "https://images.unsplash.com/photo-1521537634581-0dced2efa2a3?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "算界內球（得分/有效）", isCorrect: true },
+                    { text: "算界外球", isCorrect: false },
+                    { text: "不算分，重新發球", isCorrect: false },
+                    { text: "由裁判抽籤決定", isCorrect: false }
+                ],
+                rationale: "羽球正式規則中，球體的任何部分只要觸及或壓在球場邊線線上，皆判定為界內球（In）。"
+            },
+            {
+                category: "網球",
+                difficulty: "中等",
+                question: "在網球比賽中，分數計算非常特別，從 0 分開始贏得第一個球時記為多少分？",
+                illustration: "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "1 分", isCorrect: false },
+                    { text: "10 分", isCorrect: false },
+                    { text: "15 分", isCorrect: true },
+                    { text: "25 分", isCorrect: false }
+                ],
+                rationale: "網球每局計分順序為：0分(Love) -> 15分 -> 30分 -> 40分 -> 勝局。"
+            },
+            {
+                category: "運動急救",
+                difficulty: "簡單",
+                question: "在長跑或劇烈運動後突然停下，如果出現頭暈目眩，最適當的立即處理方式是什麼？",
+                illustration: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "立刻蹲下並緊閉雙眼", isCorrect: false },
+                    { text: "減緩速度改為慢走調節呼吸，並補充水分", isCorrect: true },
+                    { text: "馬上大量快速喝冰水", isCorrect: false },
+                    { text: "立刻繼續快速衝刺", isCorrect: false }
+                ],
+                rationale: "劇烈運動後血液多集中在下肢，突然停下易導致腦部暫時缺血頭暈，應緩和慢走幫助血液回流。"
+            },
+            {
+                category: "跆拳道",
+                difficulty: "中等",
+                question: "跆拳道比賽中，選手穿著護具主要進行攻擊的部位不包括哪裡？",
+                illustration: "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "軀幹正面的護具部位", isCorrect: false },
+                    { text: "頭部護具部位", isCorrect: false },
+                    { text: "腰部以下（如大腿與膝蓋）", isCorrect: true },
+                    { text: "面罩護具區域", isCorrect: false }
+                ],
+                rationale: "跆拳道競技規範嚴禁攻擊腰部以下（膝蓋、大腿、下體）及脊椎後方，違者會被判犯規警告。"
+            },
+            {
+                category: "籃球",
+                difficulty: "簡單",
+                question: "籃球比賽中，在三分線外投籃命中可以得到幾分？",
+                illustration: "https://images.unsplash.com/photo-1519861531473-9200262188bf?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "1 分", isCorrect: false },
+                    { text: "2 分", isCorrect: false },
+                    { text: "3 分", isCorrect: true },
+                    { text: "4 分", isCorrect: false }
+                ],
+                rationale: "罰球得 1 分，三分線以內的投籃得 2 分，三分線外的投籃命中則得 3 分。"
+            },
+            {
+                category: "棒球",
+                difficulty: "簡單",
+                question: "棒球比賽中，打擊者擊出高飛球被野手在空中直接接住（未落地），打擊者會被判定什麼？",
+                illustration: "https://images.unsplash.com/photo-1508344928928-7165b67de128?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "接殺出局 (Fly out)", isCorrect: true },
+                    { text: "封殺出局 (Force out)", isCorrect: false },
+                    { text: "觸殺出局 (Tag out)", isCorrect: false },
+                    { text: "保送一壘", isCorrect: false }
+                ],
+                rationale: "打擊者擊出的界內或界外高飛球，只要在落地前被野手合法接住，即為「接殺出局」。"
+            },
+            {
+                category: "體適能",
+                difficulty: "簡單",
+                question: "心肺耐力是健康體適能重要指標，請問提升心肺耐力最佳的運動型態是什麼？",
+                illustration: "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "無氧肌力訓練", isCorrect: false },
+                    { text: "持續性的有氧運動（如跑步、游泳、騎單車）", isCorrect: true },
+                    { text: "靜態拉筋伸展", isCorrect: false },
+                    { text: "舉重", isCorrect: false }
+                ],
+                rationale: "有氧運動能讓心臟與肺部持續提供氧氣給肌肉，有效強化心肺功能與耐久力。"
+            },
+            {
+                category: "桌球",
+                difficulty: "簡單",
+                question: "桌球正規比賽中，先獲得幾分且領先對手 2 分以上的球員獲勝一局？",
+                illustration: "https://images.unsplash.com/photo-1534158914592-062992fbe900?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "6 分", isCorrect: false },
+                    { text: "11 分", isCorrect: true },
+                    { text: "21 分", isCorrect: false },
+                    { text: "25 分", isCorrect: false }
+                ],
+                rationale: "現行桌球國際新制為每局 11 分制，若比分達到 10:10 則需進行 Deuce（連贏2分者勝）。"
+            },
+            {
+                category: "排球",
+                difficulty: "簡單",
+                question: "排球比賽發球時，發球球員踩到球場後方的底線發球，會被判定什麼？",
+                illustration: "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "發球踩線違例（喪失發球權且對方得分）", isCorrect: true },
+                    { text: "重新發球一次", isCorrect: false },
+                    { text: "黃牌警告", isCorrect: false },
+                    { text: "技術犯規", isCorrect: false }
+                ],
+                rationale: "發球員擊球瞬間或踏跳時，不得踏觸底線或發球區兩側延長線外的地面，否則算發球違例。"
+            },
+            {
+                category: "游泳防溺",
+                difficulty: "簡單",
+                question: "如果在開放水域（如海邊或溪流）遇到「離岸流」被拉往外海時，正確的自救方式是什麼？",
+                illustration: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "拼命逆著水流向岸邊游", isCorrect: false },
+                    { text: "保持冷靜漂浮，向兩側（平行海岸）游出離岸流區域", isCorrect: true },
+                    { text: "立刻放手向下潛水", isCorrect: false },
+                    { text: "脫掉救生衣", isCorrect: false }
+                ],
+                rationale: "離岸流流速極快，逆流硬游易體力透支；應保持漂浮放鬆，順流向平行海岸線兩側游出流區再折返回岸。"
+            },
+            {
+                category: "運動營養",
+                difficulty: "簡單",
+                question: "運動前與運動中補充水分，每次飲用的最佳方式是什麼？",
+                illustration: "https://images.unsplash.com/photo-1523362628745-0c100150b504?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "一口氣喝下 1000cc 冰水", isCorrect: false },
+                    { text: "少量多次補充常溫水或運動飲料", isCorrect: true },
+                    { text: "完全不喝水避免肚子痛", isCorrect: false },
+                    { text: "只喝高糖份碳酸飲料", isCorrect: false }
+                ],
+                rationale: "少量多次（每15-20分鐘補充100-200cc）能避免胃部負擔，又能持續補充電解質與水分。"
+            },
+            {
+                category: "足球",
+                difficulty: "中等",
+                question: "足球比賽中，防守球員在自家的「罰球區（大禁區）」內犯規，裁判會判給對方什麼懲罰？",
+                illustration: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=500&auto=format&fit=crop&q=80",
+                options: [
+                    { text: "12碼罰球 (Penalty Kick)", isCorrect: true },
+                    { text: "角球", isCorrect: false },
+                    { text: "界外球", isCorrect: false },
+                    { text: "間接自由球", isCorrect: false }
+                ],
+                rationale: "在禁區內發生可判直接自由球的犯規，將處以 12 碼罰球（點球），由攻方一對一射門。"
+            }
+        ];
+
+        // --- GAME STATE VARIABLES ---
+        let activeQuestions = [];
+        let activeVillains = [];
+        let currentStageIndex = 0;
+        let wrongAnswersCount = 0;
+        let currentQuestion = null;
+        let canAnswer = true;
+
+        // Score & Combo System Variables
+        let totalScore = 0;
+        let correctAnswersCount = 0;
+        let currentCombo = 0;
+        let maxCombo = 0;
+
+        // Audio System Variables
+        let audioCtx = null;
+        let isAudioMuted = false;
+        let bgmTimer = null;
+        let bgmStep = 0;
+
+        function shuffleArray(arr) {
+            const array = [...arr];
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function toggleAudio() {
+            isAudioMuted = !isAudioMuted;
+            const statusText = document.getElementById('bgm-status-text');
+            const bgmIcon = document.getElementById('bgm-icon');
+            const waveAnim = document.getElementById('sound-wave-anim');
+
+            if (isAudioMuted) {
+                statusText.innerText = "對決背景音：靜音";
+                bgmIcon.className = "fa-solid fa-volume-xmark text-slate-400";
+                waveAnim.style.display = "none";
+                stopBGM();
+            } else {
+                statusText.innerText = "對決背景音：開啟";
+                bgmIcon.className = "fa-solid fa-volume-high color-primary-custom";
+                waveAnim.style.display = "inline-flex";
+                initAudioContext();
+                startBGM();
+            }
+        }
+
+        function playSFX(type) {
+            if (isAudioMuted) return;
+            initAudioContext();
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(800, now);
+                osc.frequency.exponentialRampToValueAtTime(400, now + 0.06);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } 
+            else if (type === 'correct') {
+                const freqs = [659.25, 830.61, 987.77, 1318.51, 1661.22];
+                freqs.forEach((f, i) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(f, now + i * 0.06);
+                    gain.gain.setValueAtTime(0.3, now + i * 0.06);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.35);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + i * 0.06);
+                    osc.stop(now + i * 0.06 + 0.35);
+                });
+            } 
+            else if (type === 'wrong') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.exponentialRampToValueAtTime(50, now + 0.4);
+                gain.gain.setValueAtTime(0.4, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            } 
+            else if (type === 'cage') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(120, now);
+                osc.frequency.exponentialRampToValueAtTime(25, now + 0.6);
+                gain.gain.setValueAtTime(0.5, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.6);
+            } 
+            else if (type === 'victory') {
+                const notes = [523.25, 659.25, 783.99, 1046.50, 880, 1046.50];
+                let offset = 0;
+                notes.forEach((f) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(f, now + offset);
+                    gain.gain.setValueAtTime(0.35, now + offset);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.25);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + offset);
+                    osc.stop(now + offset + 0.25);
+                    offset += 0.15;
+                });
+            }
+        }
+
+        function startBGM() {
+            stopBGM();
+            if (isAudioMuted) return;
+            initAudioContext();
+
+            bgmStep = 0;
+            bgmTimer = setInterval(() => {
+                if (isAudioMuted || !audioCtx) return;
+                const now = audioCtx.currentTime;
+
+                const isFinalBoss = (currentStageIndex === 24);
+
+                const bassOsc = audioCtx.createOscillator();
+                const bassGain = audioCtx.createGain();
+                bassOsc.type = 'sine';
+                bassOsc.frequency.setValueAtTime(isFinalBoss ? 110 : 85, now);
+                bassOsc.frequency.exponentialRampToValueAtTime(35, now + 0.15);
+                bassGain.gain.setValueAtTime(0.2, now);
+                bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                bassOsc.connect(bassGain);
+                bassGain.connect(audioCtx.destination);
+                bassOsc.start(now);
+                bassOsc.stop(now + 0.15);
+
+                const scale = isFinalBoss 
+                    ? [174.61, 185.00, 220.00, 246.94] 
+                    : [261.63, 329.63, 392.00, 523.25]; 
+                
+                const synthOsc = audioCtx.createOscillator();
+                const synthGain = audioCtx.createGain();
+                synthOsc.type = isFinalBoss ? 'sawtooth' : 'triangle';
+                synthOsc.frequency.setValueAtTime(scale[bgmStep % scale.length], now);
+                synthGain.gain.setValueAtTime(0.06, now);
+                synthGain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                synthOsc.connect(synthGain);
+                synthGain.connect(audioCtx.destination);
+                synthOsc.start(now);
+                synthOsc.stop(now + 0.2);
+
+                bgmStep++;
+            }, currentStageIndex === 24 ? 180 : 320);
+        }
+
+        function stopBGM() {
+            if (bgmTimer) {
+                clearInterval(bgmTimer);
+                bgmTimer = null;
+            }
+        }
+
+        function startGame() {
+            playSFX('click');
+            currentStageIndex = 0;
+            wrongAnswersCount = 0;
+            
+            // Reset Score & Combo
+            totalScore = 0;
+            correctAnswersCount = 0;
+            currentCombo = 0;
+            maxCombo = 0;
+            document.getElementById('header-score').innerText = "0";
+
+            activeQuestions = shuffleArray(rawQuestionsData);
+            activeVillains = shuffleArray(disneyVillainsList);
+
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('game-over-screen').classList.add('hidden');
+            document.getElementById('victory-screen').classList.add('hidden');
+            document.getElementById('battle-screen').classList.remove('hidden');
+
+            startBGM();
+            loadStage();
+        }
+
+        function restartGame() {
+            playSFX('click');
+            currentStageIndex = 0;
+            wrongAnswersCount = 0;
+
+            // Reset Score & Combo
+            totalScore = 0;
+            correctAnswersCount = 0;
+            currentCombo = 0;
+            maxCombo = 0;
+            document.getElementById('header-score').innerText = "0";
+
+            activeQuestions = shuffleArray(rawQuestionsData);
+            activeVillains = shuffleArray(disneyVillainsList);
+
+            document.getElementById('game-over-screen').classList.add('hidden');
+            document.getElementById('victory-screen').classList.add('hidden');
+            document.getElementById('battle-screen').classList.remove('hidden');
+
+            startBGM();
+            loadStage();
+        }
+
+        function loadStage() {
+            canAnswer = true;
+            document.getElementById('feedback-box').classList.add('hidden');
+            document.getElementById('ai-illustration-container').classList.add('hidden');
+
+            const stageNum = currentStageIndex + 1;
+            document.getElementById('current-stage').innerText = stageNum;
+            const progressPercent = (stageNum / 25) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            const currentMermaid = mermaids[0];
+            document.getElementById('start-mermaid-img').src = currentMermaid.img;
+            document.getElementById('mermaid-img').src = currentMermaid.img;
+            document.getElementById('mermaid-name').innerText = currentMermaid.name;
+            document.getElementById('mermaid-name').className = `font-bold text-sm md:text-base ${currentMermaid.color}`;
+            document.getElementById('mermaid-title').innerText = currentMermaid.title;
+
+            updateLivesDisplay();
+
+            let currentBoss;
+            if (stageNum === 25) {
+                currentBoss = finalClownBoss;
+                startBGM();
+            } else {
+                currentBoss = activeVillains[currentStageIndex % activeVillains.length];
+            }
+
+            document.getElementById('boss-img').src = currentBoss.img;
+            document.getElementById('boss-name').innerText = currentBoss.name;
+            document.getElementById('boss-title').innerText = currentBoss.title;
+
+            currentQuestion = activeQuestions[currentStageIndex];
+            document.getElementById('question-category').innerText = currentQuestion.category;
+            document.getElementById('question-difficulty').innerHTML = `<i class="fa-solid fa-star mr-1 color-primary-custom"></i>難易度：${currentQuestion.difficulty}`;
+            document.getElementById('question-text').innerText = `【第 ${stageNum} 關】${currentQuestion.question}`;
+            document.getElementById('question-illustration').src = currentQuestion.illustration;
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            currentQuestion.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-secondary-custom transition transform hover:-translate-y-0.5 text-sm md:text-base font-medium flex items-center justify-between color-secondary-custom shadow-sm";
+                btn.onclick = () => handleAnswer(opt, btn);
+                btn.innerHTML = `
+                    <span><span class="inline-block w-6 h-6 rounded-full bg-slate-950 color-primary-custom text-xs text-center leading-6 mr-2.5 font-bold border border-primary-custom">${String.fromCharCode(65 + idx)}</span>${opt.text}</span>
+                    <i class="fa-regular fa-circle text-slate-400 opacity-50"></i>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function updateLivesDisplay() {
+            const container = document.getElementById('lives-container');
+            container.innerHTML = '';
+            const remainingLives = 2 - wrongAnswersCount;
+            for (let i = 0; i < 2; i++) {
+                if (i < remainingLives) {
+                    container.innerHTML += `<i class="fa-solid fa-heart text-red-500 text-lg animate-pulse drop-shadow"></i>`;
+                } else {
+                    container.innerHTML += `<i class="fa-solid fa-heart text-slate-700 text-lg"></i>`;
+                }
+            }
+        }
+
+        function handleAnswer(selectedOption, buttonEl) {
+            if (!canAnswer) return;
+            canAnswer = false;
+
+            const feedbackBox = document.getElementById('feedback-box');
+            const feedbackText = document.getElementById('feedback-text');
+            const illustrationContainer = document.getElementById('ai-illustration-container');
+            const explanationImg = document.getElementById('ai-explanation-img');
+            const explanationText = document.getElementById('ai-explanation-text');
+
+            if (selectedOption.isCorrect) {
+                playSFX('correct');
+                buttonEl.classList.remove('bg-slate-900/90', 'border-secondary-custom');
+                buttonEl.classList.add('bg-emerald-600/90', 'border-emerald-300', 'text-white', 'glow-custom');
+                
+                // Calculate Score & Combo
+                correctAnswersCount++;
+                currentCombo++;
+                if (currentCombo > maxCombo) maxCombo = currentCombo;
+
+                const basePoints = 100;
+                const comboBonus = (currentCombo - 1) * 20;
+                const gainedPoints = basePoints + comboBonus;
+                totalScore += gainedPoints;
+
+                document.getElementById('header-score').innerText = totalScore;
+
+                triggerAttackBeam();
+
+                feedbackBox.className = "p-4 rounded-xl mb-4 text-sm font-semibold bg-emerald-950/90 border border-emerald-500 text-emerald-100 block animate__animated animate__fadeIn";
+                feedbackText.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span><i class="fa-solid fa-circle-check text-emerald-400 mr-2 text-lg"></i><strong>答對了！閃亮歌聲光束攻擊成功！</strong></span>
+                        <span class="text-xs bg-amber-500/20 text-amber-300 border border-amber-400 px-2.5 py-0.5 rounded-full">+${gainedPoints} 分 (${currentCombo} Combo)</span>
+                    </div>
+                    <span class="text-xs text-emerald-200 mt-1 block">${currentQuestion.rationale}</span>
+                `;
+                illustrationContainer.classList.add('hidden');
+
+            } else {
+                playSFX('wrong');
+                wrongAnswersCount++;
+                currentCombo = 0; // Reset Combo
+                updateLivesDisplay();
+
+                buttonEl.classList.remove('bg-slate-900/90', 'border-secondary-custom');
+                buttonEl.classList.add('bg-red-600/90', 'border-red-400', 'text-white');
+
+                const bossImg = document.getElementById('boss-img');
+                bossImg.classList.add('animate__animated', 'animate__headShake');
+                setTimeout(() => bossImg.classList.remove('animate__animated', 'animate__headShake'), 1000);
+
+                feedbackBox.className = "p-4 rounded-xl mb-4 text-sm font-semibold bg-red-950/90 border border-red-500 text-red-100 block animate__animated animate__fadeIn";
+                feedbackText.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-red-400 mr-2 text-lg"></i><strong>答錯了！遭受魔王反擊！請閱讀下方觀念解析：</strong>`;
+
+                explanationImg.src = currentQuestion.illustration;
+                explanationText.innerHTML = `<strong class="text-white">【觀念重點說明】</strong><br>${currentQuestion.rationale}`;
+                illustrationContainer.classList.remove('hidden');
+            }
+
+            if (wrongAnswersCount >= 2) {
+                setTimeout(() => {
+                    triggerGameOver();
+                }, 2500);
+            }
+        }
+
+        function triggerAttackBeam() {
+            const beam = document.getElementById('attack-beam');
+            beam.classList.add('attack-active');
+
+            const bossImg = document.getElementById('boss-img');
+            setTimeout(() => {
+                bossImg.classList.add('animate__animated', 'animate__flash');
+            }, 300);
+
+            setTimeout(() => {
+                beam.classList.remove('attack-active');
+                bossImg.classList.remove('animate__animated', 'animate__flash');
+            }, 900);
+        }
+
+        function nextQuestion() {
+            playSFX('click');
+            if (wrongAnswersCount >= 2) return;
+
+            currentStageIndex++;
+            if (currentStageIndex >= 25) {
+                triggerVictory();
+            } else {
+                loadStage();
+            }
+        }
+
+        function triggerGameOver() {
+            stopBGM();
+            playSFX('cage');
+
+            document.getElementById('battle-screen').classList.add('hidden');
+            
+            const currentMermaid = mermaids[0];
+            document.getElementById('caged-mermaid-img').src = currentMermaid.img;
+            
+            // Render Game Over Score Summary
+            document.getElementById('gameover-final-score').innerText = `${totalScore} 分`;
+            document.getElementById('gameover-correct-count').innerText = correctAnswersCount;
+            document.getElementById('gameover-max-combo').innerText = `${maxCombo} Combo`;
+
+            document.getElementById('game-over-screen').classList.remove('hidden');
+        }
+
+        function triggerVictory() {
+            stopBGM();
+            playSFX('victory');
+
+            document.getElementById('victory-mermaid-img').src = LUCHIA_IMAGE_URL;
+
+            // Render Victory Score Summary
+            document.getElementById('victory-final-score').innerText = `${totalScore} 分`;
+            document.getElementById('victory-correct-count').innerText = `${correctAnswersCount} / 25`;
+            document.getElementById('victory-max-combo').innerText = `${maxCombo} Combo`;
+
+            // Calculate Rank
+            const rankBadge = document.getElementById('victory-rank-badge');
+            if (totalScore >= 3000) {
+                rankBadge.innerText = "S級 神級體育歌聲";
+                rankBadge.className = "mt-2 inline-block px-3 py-1 bg-amber-500/20 text-amber-300 text-xs font-bold rounded-full border border-amber-400";
+            } else if (totalScore >= 2200) {
+                rankBadge.innerText = "A級 優秀真珠歌聲";
+                rankBadge.className = "mt-2 inline-block px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-bold rounded-full border border-blue-400";
+            } else {
+                rankBadge.innerText = "B級 運動闖關達人";
+                rankBadge.className = "mt-2 inline-block px-3 py-1 bg-emerald-500/20 text-emerald-300 text-xs font-bold rounded-full border border-emerald-400";
+            }
+
+            document.getElementById('battle-screen').classList.add('hidden');
+            document.getElementById('victory-screen').classList.remove('hidden');
+        }
+
+        function initBubbles() {
+            const container = document.getElementById('bubbles-container');
+            for (let i = 0; i < 18; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                const size = Math.random() * 28 + 10;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${Math.random() * 100}%`;
+                bubble.style.animationDelay = `${Math.random() * 5}s`;
+                bubble.style.animationDuration = `${Math.random() * 6 + 6}s`;
+                container.appendChild(bubble);
+            }
+        }
+
+        window.onload = function() {
+            initBubbles();
+            document.getElementById('start-mermaid-img').src = LUCHIA_IMAGE_URL;
+        };
+    </script>
+</body>
+</html>
